@@ -25,7 +25,7 @@ data class UserEntity constructor(
     @LastModifiedDate
     override var updatedAt: Instant,
     override var version: Long,
-) : User.Editor, DateAuditable {
+) : User.Editor {
 
     companion object {
         fun from(src: User): UserEntity = with(src) {
