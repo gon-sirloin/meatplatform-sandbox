@@ -10,6 +10,7 @@ import com.sirloin.sandbox.server.core.converter.InstantStringConverters
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter
 import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration
+import org.springframework.data.jdbc.repository.config.EnableJdbcAuditing
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
  * @since 2022-02-14
  */
 @Configuration
+@EnableJdbcAuditing
 @EnableJdbcRepositories(CoreApplication.PACKAGE_NAME)
 class SpringDataJdbcConfig : AbstractJdbcConfiguration() {
     override fun userConverters(): List<Converter<*, *>> {
