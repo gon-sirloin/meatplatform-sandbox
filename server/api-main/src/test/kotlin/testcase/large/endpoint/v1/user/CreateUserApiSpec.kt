@@ -22,6 +22,8 @@ import test.large.endpoint.v1.user.createUserRequestFieldsSnippet
 import test.large.endpoint.v1.user.random
 import test.large.endpoint.v1.user.userInfoResponseFieldsSnippet
 import testcase.large.endpoint.v1.UserTestBaseV1
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 @Suppress("ClassName")  // Test fixture 이름 잘 짓기 위해 무시
 class CreateUserApiSpec : UserTestBaseV1() {
@@ -33,7 +35,7 @@ class CreateUserApiSpec : UserTestBaseV1() {
 
         // then:
         val response = jsonRequest()
-            .withDocumentation(createUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+//            .withDocumentation(createUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
             .body(request)
             .post(ApiPathsV1.USER)
             .expect2xx(UserResponse::class)
@@ -41,7 +43,8 @@ class CreateUserApiSpec : UserTestBaseV1() {
         // expect:
         assertAll(
             { assertThat(response.nickname, `is`(request.nickname)) },
-            { assertThat(response.profileImageUrl, `is`(request.profileImageUrl)) }
+            { assertThat(response.profileImageUrl, `is`(request.profileImageUrl)) },
+            { assertThat(response.password, `is`(request.password)) }
         )
     }
 
@@ -81,5 +84,31 @@ class CreateUserApiSpec : UserTestBaseV1() {
                 .expect4xx(HttpStatus.BAD_REQUEST)
                 .withExceptionCode(MtExceptionCode.WRONG_INPUT)
         }
+
+        @DisplayName("비밀번호에 허용되지 않은 특수문자가 포함되어 있다.")
+        @Test
+        fun `password not valid`() {
+            // given:
+            val request = CreateUserRequest.random(
+                password = "{{{{}}}}"
+            )
+
+            // then:
+            jsonRequest()
+//                .withErrorDocumentation()
+                .body(request)
+                .post(ApiPathsV1.USER)
+                .expect4xx(HttpStatus.BAD_REQUEST)
+                .withExceptionCode(MtExceptionCode.WRONG_INPUT)
+        }
+    }
+
+    @Test
+    fun regexTest(){
+        val regex  = "^[a-zA-Z0-9]*\$"
+        val p = Pattern.compile(regex)
+        val m: Matcher = p.matcher("1234")
+        val b: Boolean = m.matches()
+        assertThat(b, `is`(true))
     }
 }

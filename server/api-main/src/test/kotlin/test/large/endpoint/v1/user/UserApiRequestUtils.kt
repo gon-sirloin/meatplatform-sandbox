@@ -12,11 +12,13 @@ private const val DEFAULT_STRING = "__DEFAULT__"
 
 fun CreateUserRequest.Companion.random(
     nickname: String? = null,
-    profileImageUrl: String? = null
+    profileImageUrl: String? = null,
+    password:String? = null,
 ): CreateUserRequest = with(Faker()) {
     return CreateUserRequest(
         nickname = nickname ?: name().username(),
-        profileImageUrl = profileImageUrl ?: internet().image()
+        profileImageUrl = profileImageUrl ?: internet().image(),
+        password =  password ?: "1234"
     )
 }
 
