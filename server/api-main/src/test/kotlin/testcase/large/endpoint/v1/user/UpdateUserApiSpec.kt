@@ -83,6 +83,44 @@ class UpdateUserApiSpec : UserTestBaseV1() {
             .withExceptionCode(MtExceptionCode.USER_NOT_FOUND)
     }
 
+    @DisplayName("비밀번호 일치시 업데이트가 된다.")
+    @Test
+    fun updateInfoByPasswordVerifySuccess() {
+        // given:
+        val createdUser = createRandomUser()
+
+        // when:
+        val request = UpdateUserRequest.random(password = createdUser.password!!)
+
+        // then:
+        jsonRequest()
+            .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+            .body(request)
+            .patch(ApiPathsV1.userWithUuid(createdUser.uuid))
+            .expect2xx(UserResponse::class)
+    }
+
+    @DisplayName("비밀번호 불일치시 예외 발생한다.")
+    @Test
+    fun notUpdateInfoByPasswordVerifyFail() {
+        // given:
+        val createdUser = createRandomUser()
+
+        // when:
+        val request = UpdateUserRequest.random(password = (createdUser.password!! + "1"))
+
+        // then:
+        jsonRequest()
+            .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+            .body(request)
+            .patch(ApiPathsV1.userWithUuid(createdUser.uuid))
+            .expect4xx(HttpStatus.NOT_FOUND)
+            .withExceptionCode(MtExceptionCode.USER_NOT_FOUND)
+
+
+    }
+
+
     companion object {
         @JvmStatic
         fun omittedFieldNotUpdatedParams(): Stream<UpdateUserRequest> = Stream.of(

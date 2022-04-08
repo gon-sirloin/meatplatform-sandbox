@@ -32,6 +32,10 @@ fun updateUserRequestFieldsSnippet(): List<FieldDescriptor> = listOf(
     fieldWithPath(UpdateUserRequest::profileImageUrl.asRequestField())
         .type(JsonFieldType.STRING)
         .description(UpdateUserRequest.DESC_PROFILE_IMAGE_URL)
+        .optional(),
+    fieldWithPath(UpdateUserRequest::password.asRequestField())
+        .type(JsonFieldType.STRING)
+        .description(UpdateUserRequest.DESC_PASSWORD)
         .optional()
 )
 
