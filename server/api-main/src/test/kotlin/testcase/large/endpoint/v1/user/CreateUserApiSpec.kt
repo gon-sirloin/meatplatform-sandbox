@@ -35,7 +35,7 @@ class CreateUserApiSpec : UserTestBaseV1() {
 
         // then:
         val response = jsonRequest()
-//            .withDocumentation(createUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+            .withDocumentation(createUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
             .body(request)
             .post(ApiPathsV1.USER)
             .expect2xx(UserResponse::class)
@@ -90,7 +90,7 @@ class CreateUserApiSpec : UserTestBaseV1() {
         fun `password not valid`() {
             // given:
             val request = CreateUserRequest.random(
-                password = "{{{{}}}}"
+                password = "123~123}aa"
             )
 
             // then:
@@ -103,6 +103,7 @@ class CreateUserApiSpec : UserTestBaseV1() {
         }
     }
 
+    @DisplayName("비밀번호 검사에 사용된 정규식 테스트")
     @Test
     fun regexTest(){
         val regex  = "^[a-zA-Z0-9]*\$"
@@ -110,5 +111,15 @@ class CreateUserApiSpec : UserTestBaseV1() {
         val m: Matcher = p.matcher("1234")
         val b: Boolean = m.matches()
         assertThat(b, `is`(true))
+    }
+
+    @DisplayName("비밀번호 검사에 사용된 정규식 실패 테스트")
+    @Test
+    fun regexTest_fail(){
+        val regex  = "^[a-zA-Z0-9]*\$"
+        val p = Pattern.compile(regex)
+        val m: Matcher = p.matcher("123{}4")
+        val b: Boolean = m.matches()
+        assertThat(b, `is`(false))
     }
 }

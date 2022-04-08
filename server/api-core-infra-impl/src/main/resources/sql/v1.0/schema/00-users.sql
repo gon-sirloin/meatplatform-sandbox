@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `users`
     `uuid`              BINARY(16)  NOT NULL,
     `nickname`          VARCHAR(64) NOT NULL,
     `profile_image_url` TEXT        NOT NULL,
+    `password`          VARCHAR(64) NOT NULL,
     `deleted_at`        DATETIME,
     `created_at`        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`        DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,

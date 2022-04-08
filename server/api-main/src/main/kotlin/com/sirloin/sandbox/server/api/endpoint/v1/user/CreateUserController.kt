@@ -44,7 +44,8 @@ class CreateUserControllerImpl(
         val createdUser = req.run {
             svc.createUser(
                 nickname = req.nickname,
-                profileImageUrl = req.profileImageUrl
+                profileImageUrl = req.profileImageUrl,
+                password = req.password
             )
         }
 

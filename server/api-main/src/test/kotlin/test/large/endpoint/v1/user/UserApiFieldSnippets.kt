@@ -17,7 +17,11 @@ fun createUserRequestFieldsSnippet(): List<FieldDescriptor> = listOf(
         .description(CreateUserRequest.DESC_NICKNAME),
     fieldWithPath(CreateUserRequest::profileImageUrl.asRequestField())
         .type(JsonFieldType.STRING)
-        .description(CreateUserRequest.DESC_PROFILE_IMAGE_URL)
+        .description(CreateUserRequest.DESC_PROFILE_IMAGE_URL),
+    fieldWithPath(CreateUserRequest::password.asRequestField())
+        .type(JsonFieldType.STRING)
+        .description(CreateUserRequest.DESC_PASSWORD)
+        .optional()
 )
 
 fun updateUserRequestFieldsSnippet(): List<FieldDescriptor> = listOf(
@@ -41,6 +45,10 @@ fun userInfoResponseFieldsSnippet(): List<FieldDescriptor> = ArrayList(basicResp
     fieldWithPath(UserResponse::profileImageUrl.asPrefixedRequestField("body"))
         .type(JsonFieldType.STRING)
         .description(UserResponse.DESC_PROFILE_IMAGE_URL),
+    fieldWithPath(CreateUserRequest::password.asPrefixedRequestField("body"))
+        .type(JsonFieldType.STRING)
+        .description(UserResponse.DESC_PASSWORD)
+        .optional()
 )
 
 fun deletedUserInfoResponseFieldsSnippet(): List<FieldDescriptor> = ArrayList(basicResponseFieldsSnippet()) + listOf(

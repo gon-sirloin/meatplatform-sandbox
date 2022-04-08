@@ -16,6 +16,7 @@ fun randomUser(
     uuid: UUID? = null,
     nickname: String? = null,
     profileImageUrl: String? = null,
+    password : String? = null,
     createdAt: Instant? = null,
     updatedAt: Instant? = null,
     version: Long? = null
@@ -24,6 +25,7 @@ fun randomUser(
         uuid = uuid,
         nickname = nickname ?: name().username(),
         profileImageUrl = profileImageUrl ?: internet().image(),
+        password = password ?:  internet().password(),
         createdAt = createdAt,
         updatedAt = updatedAt,
         version = version

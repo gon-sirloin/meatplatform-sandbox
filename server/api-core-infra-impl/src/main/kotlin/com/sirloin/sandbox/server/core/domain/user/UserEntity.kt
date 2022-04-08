@@ -19,6 +19,7 @@ data class UserEntity constructor(
     override val uuid: UUID,
     override var nickname: String,
     override var profileImageUrl: String,
+    override val password : String,
     override var deletedAt: Instant?,
     @CreatedDate
     override var createdAt: Instant,
@@ -34,6 +35,7 @@ data class UserEntity constructor(
                 uuid = uuid,
                 nickname = nickname,
                 profileImageUrl = profileImageUrl,
+                password = password,
                 deletedAt = deletedAt,
                 createdAt = createdAt,
                 updatedAt = updatedAt,

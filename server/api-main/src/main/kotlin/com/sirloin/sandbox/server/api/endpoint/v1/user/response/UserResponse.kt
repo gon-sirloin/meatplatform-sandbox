@@ -46,7 +46,7 @@ data class UserResponse(
             uuid = src.uuid,
             nickname = src.nickname,
             profileImageUrl = src.profileImageUrl,
-            password = null
+            password = src.password
         )
     }
 }

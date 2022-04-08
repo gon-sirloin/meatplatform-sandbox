@@ -27,6 +27,8 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
     val isDeleted: Boolean
         get() = deletedAt != null
 
+    val password : String
+
     override fun edit(): Editor
 
     // POINT: 왜 User 도메인 모델을 mutable 로 설계하지 않고, 이런 타입을 별도로 만들었을까요?
@@ -60,6 +62,7 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
             override val uuid: UUID,
             override var nickname: String,
             override var profileImageUrl: String,
+            override val password : String,
             override var deletedAt: Instant?,
             override val createdAt: Instant,
             override var updatedAt: Instant,
@@ -72,6 +75,7 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
             uuid: UUID? = null,
             nickname: String,
             profileImageUrl: String,
+            password : String,
             deletedAt: Instant? = null,
             createdAt: Instant? = null,
             updatedAt: Instant? = null,
@@ -83,6 +87,7 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
                 uuid = uuid ?: UUID.randomUUID(),
                 nickname = nickname,
                 profileImageUrl = profileImageUrl,
+                password = password,
                 deletedAt = deletedAt,
                 createdAt = createdAt ?: now,
                 updatedAt = updatedAt ?: now,
@@ -95,6 +100,7 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
                 uuid = uuid,
                 nickname = nickname,
                 profileImageUrl = profileImageUrl,
+                password = password,
                 deletedAt = deletedAt,
                 createdAt = createdAt,
                 updatedAt = updatedAt,

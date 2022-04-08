@@ -18,7 +18,7 @@ fun CreateUserRequest.Companion.random(
     return CreateUserRequest(
         nickname = nickname ?: name().username(),
         profileImageUrl = profileImageUrl ?: internet().image(),
-        password =  password ?: "1234"
+        password =  password ?: internet().password()
     )
 }
 

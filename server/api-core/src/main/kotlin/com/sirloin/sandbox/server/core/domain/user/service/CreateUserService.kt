@@ -17,7 +17,8 @@ import java.util.*
 interface CreateUserService {
     fun createUser(
         nickname: String,
-        profileImageUrl: String
+        profileImageUrl: String,
+        password : String
     ): User
 
     companion object {
@@ -32,12 +33,13 @@ internal class CreateUserServiceImpl(
     private val userRepo: UserRepository,
     private val localeProvider: LocaleProvider
 ) : CreateUserService {
-    override fun createUser(nickname: String, profileImageUrl: String): User {
+    override fun createUser(nickname: String, profileImageUrl: String, password : String): User {
         return userRepo.save(
             User.create(
                 uuid = UUID.randomUUID(),
                 nickname = nickname,
-                profileImageUrl = profileImageUrl
+                profileImageUrl = profileImageUrl,
+                password = password
             )
         )
     }
