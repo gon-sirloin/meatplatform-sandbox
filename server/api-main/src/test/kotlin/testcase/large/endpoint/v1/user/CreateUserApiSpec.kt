@@ -95,7 +95,7 @@ class CreateUserApiSpec : UserTestBaseV1() {
 
             // then:
             jsonRequest()
-//                .withErrorDocumentation()
+                .withErrorDocumentation()
                 .body(request)
                 .post(ApiPathsV1.USER)
                 .expect4xx(HttpStatus.BAD_REQUEST)
