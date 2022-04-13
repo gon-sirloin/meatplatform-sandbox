@@ -33,4 +33,15 @@ class UserSpec {
             { assertThat(deletedUser.deletedAt, greaterThanOrEqualTo(beforeDelete)) }
         )
     }
+
+    @DisplayName("생성한 User 를 삭제하면 삭제 시점의 시간이 기록된다")
+    @Test
+    fun `password valid false`() {
+        // given:
+        val user = randomUser()
+        val wrongPassword = user.password+1
+
+        // when: then:
+        assertThat(user.passwordValid(wrongPassword) , `is`(false))
+    }
 }

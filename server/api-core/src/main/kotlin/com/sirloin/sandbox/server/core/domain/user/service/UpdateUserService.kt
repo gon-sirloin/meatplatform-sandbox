@@ -8,6 +8,8 @@ import com.sirloin.jvmlib.time.truncateToSeconds
 import com.sirloin.sandbox.server.core.domain.user.User
 import com.sirloin.sandbox.server.core.domain.user.common.UserServiceMixin
 import com.sirloin.sandbox.server.core.domain.user.repository.UserRepository
+import com.sirloin.sandbox.server.core.exception.ClientException
+import com.sirloin.sandbox.server.core.exception.MtExceptionCode
 import com.sirloin.sandbox.server.core.i18n.LocaleProvider
 import java.time.Instant
 import java.util.*
@@ -20,6 +22,7 @@ import java.util.*
 interface UpdateUserService {
     fun updateUser(
         uuid: UUID,
+        password : String,
         nickname: String? = null,
         profileImageUrl: String? = null
     ): User
@@ -36,8 +39,17 @@ internal class UpdateUserServiceImpl(
     override val userRepo: UserRepository,
     override val localeProvider: LocaleProvider
 ) : UpdateUserService, UserServiceMixin {
-    override fun updateUser(uuid: UUID, nickname: String?, profileImageUrl: String?): User {
+    override fun updateUser(
+        uuid: UUID,
+        password : String,
+        nickname: String?,
+        profileImageUrl: String?,
+    ): User {
         val user = super.getUserByUuid(uuid)
+        if (!user.passwordValid(password)) throw ClientException(
+            localeProvider = localeProvider,
+            code = MtExceptionCode.WRONG_PASSWORD
+        )
 
         return userRepo.save(user.edit().apply {
             this.nickname = nickname ?: user.nickname

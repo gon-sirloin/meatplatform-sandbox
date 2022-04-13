@@ -32,7 +32,7 @@ class UpdateUserApiSpec : UserTestBaseV1() {
         val createdUser = createRandomUser()
 
         // when:
-        val request = UpdateUserRequest.random()
+        val request = UpdateUserRequest.random(password = createdUser.password!!)
 
         // then:
         val response = jsonRequest()
@@ -54,10 +54,12 @@ class UpdateUserApiSpec : UserTestBaseV1() {
         // given:
         val createdUser = createRandomUser()
 
+
+
         // then:
         val response = jsonRequest()
             .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
-            .body(request)
+            .body(request.copy(password = createdUser.password!!))
             .patch(ApiPathsV1.userWithUuid(createdUser.uuid))
             .expect2xx(UserResponse::class)
 
@@ -111,11 +113,11 @@ class UpdateUserApiSpec : UserTestBaseV1() {
 
         // then:
         jsonRequest()
-            .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+//            .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
             .body(request)
             .patch(ApiPathsV1.userWithUuid(createdUser.uuid))
-            .expect4xx(HttpStatus.NOT_FOUND)
-            .withExceptionCode(MtExceptionCode.USER_NOT_FOUND)
+            .expect4xx(HttpStatus.UNAUTHORIZED)
+            .withExceptionCode(MtExceptionCode.WRONG_PASSWORD)
 
 
     }

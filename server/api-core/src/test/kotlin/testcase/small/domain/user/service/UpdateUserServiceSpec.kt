@@ -9,6 +9,7 @@ import com.sirloin.sandbox.server.core.domain.user.User
 import com.sirloin.sandbox.server.core.domain.user.exception.UserNotFoundException
 import com.sirloin.sandbox.server.core.domain.user.repository.UserRepository
 import com.sirloin.sandbox.server.core.domain.user.service.UpdateUserService
+import com.sirloin.sandbox.server.core.exception.ClientException
 import com.sirloin.sandbox.server.core.i18n.LocaleProvider
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -38,12 +39,12 @@ class UpdateUserServiceSpec {
         val (newName, newProfileImageUrl) = with(Faker()) {
             name().username() to internet().image()
         }
-
         // then:
         val updatedUser = sut.updateUser(
             uuid = savedUser.uuid,
             nickname = newName,
-            profileImageUrl = newProfileImageUrl
+            profileImageUrl = newProfileImageUrl,
+            password = savedUser.password
         )
 
         // expect:
@@ -75,7 +76,8 @@ class UpdateUserServiceSpec {
             // then:
             val updatedUser = sut.updateUser(
                 uuid = savedUser.uuid,
-                profileImageUrl = newProfileImageUrl
+                profileImageUrl = newProfileImageUrl,
+                password = savedUser.password
             )
 
             // expect:
@@ -92,6 +94,7 @@ class UpdateUserServiceSpec {
             val updatedUser = sut.updateUser(
                 uuid = savedUser.uuid,
                 nickname = newName,
+                password = savedUser.password
             )
 
             // expect:
@@ -107,7 +110,28 @@ class UpdateUserServiceSpec {
     fun `Error when updating nonexistent user`() {
         // expect:
         assertThrows<UserNotFoundException> {
-            sut.updateUser(UUID.randomUUID())
+            sut.updateUser(UUID.randomUUID(),Faker().internet().password())
+        }
+    }
+
+    @DisplayName("비밀번호가 일치하지 않으면 업데이트에 실패한다.")
+    @Test
+    fun `User information Password Verify fail`() {
+        // given:
+        val savedUser = userRepo.save(randomUser())
+        val (newName, newProfileImageUrl) = with(Faker()) {
+            name().username() to internet().image()
+        }
+        // then:
+
+        // expect:
+        assertThrows<ClientException>{
+            sut.updateUser(
+                uuid = savedUser.uuid,
+                nickname = newName,
+                profileImageUrl = newProfileImageUrl,
+                password = savedUser.password+1
+            )
         }
     }
 }

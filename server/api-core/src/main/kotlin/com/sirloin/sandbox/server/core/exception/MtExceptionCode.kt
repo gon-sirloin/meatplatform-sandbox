@@ -19,6 +19,7 @@ enum class MtExceptionCode(
     SERVICE_NOT_FOUND(value = 0x00000002, msgKey = "ERR_SERVICE_NOT_FOUND"),
     WRONG_PRESENTATION(value = 0x00000003, msgKey = "ERR_WRONG_PRESENTATION"),
     MALFORMED_INPUT(value = 0x00000004, msgKey = "ERR_MALFORMED_INPUT"),
+    WRONG_PASSWORD(value = 0x00000005, msgKey = "ERR_WRONG_PASSWORD"),
     // endregion
 
     // region 특정 비즈니스 종속 예외 코드 (0x10000000 - 0xfffffffe)

@@ -118,7 +118,17 @@ class CreateUserApiSpec : UserTestBaseV1() {
     fun regexTest_fail(){
         val regex  = "^[a-zA-Z0-9]*\$"
         val p = Pattern.compile(regex)
-        val m: Matcher = p.matcher("123{}4")
+        val m: Matcher = p.matcher("{}234")
+        val b: Boolean = m.matches()
+        assertThat(b, `is`(false))
+    }
+
+    @DisplayName("비밀번호 검사에 사용된 정규식 실패 테스트")
+    @Test
+    fun regexTest_fail_2(){
+        val regex  = "^[a-zA-Z0-9]*\$"
+        val p = Pattern.compile(regex)
+        val m: Matcher = p.matcher("1{}234")
         val b: Boolean = m.matches()
         assertThat(b, `is`(false))
     }

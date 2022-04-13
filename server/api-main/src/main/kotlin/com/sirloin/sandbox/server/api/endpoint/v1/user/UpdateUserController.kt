@@ -53,7 +53,8 @@ class UpdateUserControllerImpl(
             svc.updateUser(
                 uuid = uuid,
                 nickname = req.nickname,
-                profileImageUrl = req.profileImageUrl
+                profileImageUrl = req.profileImageUrl,
+                password = req.password
             )
         )
     }

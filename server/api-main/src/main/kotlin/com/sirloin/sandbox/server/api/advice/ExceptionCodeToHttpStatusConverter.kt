@@ -23,6 +23,9 @@ internal class ExceptionCodeToHttpStatusConverterImpl : ExceptionCodeToHttpStatu
         // HTTP 400: Bad request
         put(MtExceptionCode.WRONG_INPUT, HttpStatus.BAD_REQUEST)
 
+        // HTTP 401: UNAUTHORIZED request
+        put(MtExceptionCode.WRONG_PASSWORD, HttpStatus.UNAUTHORIZED)
+
         // HTTP 404: Not Found
         put(MtExceptionCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
         put(MtExceptionCode.MALFORMED_INPUT, HttpStatus.NOT_FOUND)

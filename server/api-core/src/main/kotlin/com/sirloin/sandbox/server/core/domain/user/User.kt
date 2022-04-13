@@ -4,6 +4,7 @@
  */
 package com.sirloin.sandbox.server.core.domain.user
 
+import com.sirloin.sandbox.server.core.exception.ClientException
 import com.sirloin.sandbox.server.core.model.DateAuditable
 import com.sirloin.sandbox.server.core.model.Editable
 import com.sirloin.sandbox.server.core.model.Versioned
@@ -28,6 +29,8 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
         get() = deletedAt != null
 
     val password : String
+
+    fun passwordValid(inputPassword : String) : Boolean = password == inputPassword
 
     override fun edit(): Editor
 
