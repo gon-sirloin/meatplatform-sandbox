@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
     val configurationNames = arrayOf("application", "application-" + Application.buildConfig.profile.profileName)
 
     Application().start(args, configurationNames)
+
 }
 
 /*
