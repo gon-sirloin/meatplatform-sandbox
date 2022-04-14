@@ -49,7 +49,7 @@ fun userInfoResponseFieldsSnippet(): List<FieldDescriptor> = ArrayList(basicResp
     fieldWithPath(UserResponse::profileImageUrl.asPrefixedRequestField("body"))
         .type(JsonFieldType.STRING)
         .description(UserResponse.DESC_PROFILE_IMAGE_URL),
-    fieldWithPath(CreateUserRequest::password.asPrefixedRequestField("body"))
+    fieldWithPath(UserResponse::password.asPrefixedRequestField("body"))
         .type(JsonFieldType.STRING)
         .description(UserResponse.DESC_PASSWORD)
         .optional()

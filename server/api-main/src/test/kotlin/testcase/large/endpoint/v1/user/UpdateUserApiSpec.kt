@@ -113,7 +113,7 @@ class UpdateUserApiSpec : UserTestBaseV1() {
 
         // then:
         jsonRequest()
-//            .withDocumentation(updateUserRequestFieldsSnippet(), userInfoResponseFieldsSnippet())
+            .withErrorDocumentation()
             .body(request)
             .patch(ApiPathsV1.userWithUuid(createdUser.uuid))
             .expect4xx(HttpStatus.UNAUTHORIZED)

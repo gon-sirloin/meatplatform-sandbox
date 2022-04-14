@@ -36,7 +36,7 @@ data class UpdateUserRequest(
         message = "비밀번호에 특수문자를 포함 할 수 없습니다."
     )
     @JsonProperty
-    @JsonPropertyDescription(CreateUserRequest.DESC_PASSWORD)
+    @JsonPropertyDescription(DESC_PASSWORD)
     val password: String
 ) {
     companion object {
