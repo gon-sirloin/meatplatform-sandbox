@@ -46,10 +46,7 @@ internal class UpdateUserServiceImpl(
         profileImageUrl: String?,
     ): User {
         val user = super.getUserByUuid(uuid)
-        if (!user.passwordValid(password)) throw ClientException(
-            localeProvider = localeProvider,
-            code = MtExceptionCode.WRONG_PASSWORD
-        )
+        user.passwordValid(password, localeProvider)
 
         return userRepo.save(user.edit().apply {
             this.nickname = nickname ?: user.nickname

@@ -5,6 +5,8 @@
 package com.sirloin.sandbox.server.core.domain.user
 
 import com.sirloin.sandbox.server.core.exception.ClientException
+import com.sirloin.sandbox.server.core.exception.MtExceptionCode
+import com.sirloin.sandbox.server.core.i18n.LocaleProvider
 import com.sirloin.sandbox.server.core.model.DateAuditable
 import com.sirloin.sandbox.server.core.model.Editable
 import com.sirloin.sandbox.server.core.model.Versioned
@@ -30,7 +32,13 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
 
     val password : String
 
-    fun passwordValid(inputPassword : String) : Boolean = password == inputPassword
+    fun passwordValid(inputPassword : String, localeProvider: LocaleProvider) =
+        if(password == inputPassword)
+            true
+        else throw ClientException(
+            localeProvider = localeProvider,
+            code = MtExceptionCode.WRONG_PASSWORD
+        )
 
     override fun edit(): Editor
 
