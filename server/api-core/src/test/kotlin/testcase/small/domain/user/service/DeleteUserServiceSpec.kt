@@ -67,7 +67,5 @@ class DeleteUserServiceSpec {
         }
 
         assertThat(exception.code, `is`(MtExceptionCode.WRONG_PASSWORD))
-
-
     }
 }

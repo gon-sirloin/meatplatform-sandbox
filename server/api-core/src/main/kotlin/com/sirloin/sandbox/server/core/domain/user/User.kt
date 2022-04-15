@@ -32,7 +32,7 @@ interface User : DateAuditable, Versioned<Long>, Editable<User> {
 
     val password : String
 
-    fun passwordValid(inputPassword : String, localeProvider: LocaleProvider) =
+    fun assertPassword(inputPassword : String, localeProvider: LocaleProvider) =
         if(password == inputPassword)
             true
         else throw ClientException(

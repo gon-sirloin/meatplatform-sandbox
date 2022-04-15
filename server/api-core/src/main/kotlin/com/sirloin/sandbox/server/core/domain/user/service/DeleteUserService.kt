@@ -32,7 +32,7 @@ class DeleteUserServiceImpl(
 ) : DeleteUserService, UserServiceMixin {
     override fun deleteUserByUuid(uuid: UUID, password: String): User {
         val user = super.getUserByUuid(uuid)
-        user.passwordValid(password, localeProvider)
+        user.assertPassword(password, localeProvider)
 
         return userRepo.save(user.edit().apply {
             this.delete()

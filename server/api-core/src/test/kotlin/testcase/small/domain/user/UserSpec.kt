@@ -46,7 +46,7 @@ class UserSpec {
 
         // when: then:
         assertThrows<ClientException> {
-            (user.passwordValid(wrongPassword, LocaleProvider.defaultInstance()))
+            (user.assertPassword(wrongPassword, LocaleProvider.defaultInstance()))
         }
 
     }

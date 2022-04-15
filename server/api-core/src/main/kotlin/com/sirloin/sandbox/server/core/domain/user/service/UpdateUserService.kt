@@ -8,8 +8,6 @@ import com.sirloin.jvmlib.time.truncateToSeconds
 import com.sirloin.sandbox.server.core.domain.user.User
 import com.sirloin.sandbox.server.core.domain.user.common.UserServiceMixin
 import com.sirloin.sandbox.server.core.domain.user.repository.UserRepository
-import com.sirloin.sandbox.server.core.exception.ClientException
-import com.sirloin.sandbox.server.core.exception.MtExceptionCode
 import com.sirloin.sandbox.server.core.i18n.LocaleProvider
 import java.time.Instant
 import java.util.*
@@ -46,7 +44,7 @@ internal class UpdateUserServiceImpl(
         profileImageUrl: String?,
     ): User {
         val user = super.getUserByUuid(uuid)
-        user.passwordValid(password, localeProvider)
+        user.assertPassword(password, localeProvider)
 
         return userRepo.save(user.edit().apply {
             this.nickname = nickname ?: user.nickname
