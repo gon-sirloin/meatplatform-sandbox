@@ -28,7 +28,7 @@ class DeleteUserApiSpec : UserTestBaseV1() {
         // then:
         val response = jsonRequest()
             .withDocumentation(emptyList(), deletedUserInfoResponseFieldsSnippet())
-            .delete(ApiPathsV1.userWithUuid(createdUser.uuid))
+            .delete(ApiPathsV1.userWithUuid(createdUser.uuid) + "?password=${createdUser.password}")
             .expect2xx(DeletedUserResponse::class)
 
         // expect:
@@ -41,7 +41,7 @@ class DeleteUserApiSpec : UserTestBaseV1() {
         // expect:
         jsonRequest()
             .withErrorDocumentation()
-            .delete(ApiPathsV1.userWithUuid(UUID.randomUUID()))
+            .delete(ApiPathsV1.userWithUuid(UUID.randomUUID()) + "?password=password")
             .expect4xx(HttpStatus.NOT_FOUND)
             .withExceptionCode(MtExceptionCode.USER_NOT_FOUND)
     }
@@ -53,7 +53,7 @@ class DeleteUserApiSpec : UserTestBaseV1() {
         val createdUser = createRandomUser()
 
         // when:
-        val deletedUser = deleteUser(createdUser.uuid)
+        val deletedUser = deleteUser(createdUser.uuid, createdUser.password!!)
 
         // then:
         assertThat(createdUser.uuid, `is`(deletedUser.uuid))
@@ -65,4 +65,21 @@ class DeleteUserApiSpec : UserTestBaseV1() {
             .expect4xx(HttpStatus.NOT_FOUND)
             .withExceptionCode(MtExceptionCode.USER_NOT_FOUND)
     }
+
+    @DisplayName("일치하지 않는 비밀번호의 이용자의 정보를 삭제할 수 없다. ")
+    @Test
+    fun cannotDeleteUserByNotValidPassword() {
+        // given:
+        val createdUser = createRandomUser()
+        val notValidPassword = createdUser.password + 1
+
+
+        // then: expect:
+        jsonRequest()
+            .withErrorDocumentation()
+            .delete(ApiPathsV1.userWithUuid(createdUser.uuid ) + "?password=$notValidPassword")
+            .expect4xx(HttpStatus.UNAUTHORIZED)
+            .withExceptionCode(MtExceptionCode.WRONG_PASSWORD)
+    }
+
 }

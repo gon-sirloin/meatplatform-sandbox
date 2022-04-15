@@ -10,6 +10,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
@@ -31,7 +32,7 @@ interface DeleteUserController {
         path = [ApiPathsV1.USER_UUID],
         method = [RequestMethod.DELETE]
     )
-    fun delete(@PathVariable(ApiPathsV1.PATH_VAR_UUID) uuidStr: String): DeletedUserResponse
+    fun delete(@PathVariable(ApiPathsV1.PATH_VAR_UUID) uuidStr: String, @RequestParam password: String): DeletedUserResponse
 }
 
 @RestController
@@ -40,10 +41,10 @@ class DeleteUserControllerImpl(
     private val localeProvider: LocaleProvider,
     private val log: Logger,
 ) : DeleteUserController {
-    override fun delete(uuidStr: String): DeletedUserResponse {
+    override fun delete(uuidStr: String, password: String): DeletedUserResponse {
         val uuid = uuidStringToUuid(uuidStr, localeProvider, log)
 
-        val deletedUser = svc.deleteUserByUuid(uuid)
+        val deletedUser = svc.deleteUserByUuid(uuid,password)
 
         return DeletedUserResponse(deletedUser.uuid)
     }

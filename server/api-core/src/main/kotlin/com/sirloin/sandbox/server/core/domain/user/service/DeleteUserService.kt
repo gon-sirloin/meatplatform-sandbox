@@ -16,7 +16,7 @@ import java.util.*
  * @since 2022-02-14
  */
 interface DeleteUserService {
-    fun deleteUserByUuid(uuid: UUID): User
+    fun deleteUserByUuid(uuid: UUID, password: String): User
 
     companion object {
         fun newInstance(
@@ -30,8 +30,9 @@ class DeleteUserServiceImpl(
     override val userRepo: UserRepository,
     override val localeProvider: LocaleProvider
 ) : DeleteUserService, UserServiceMixin {
-    override fun deleteUserByUuid(uuid: UUID): User {
+    override fun deleteUserByUuid(uuid: UUID, password: String): User {
         val user = super.getUserByUuid(uuid)
+        user.passwordValid(password, localeProvider)
 
         return userRepo.save(user.edit().apply {
             this.delete()

@@ -13,21 +13,22 @@ import java.util.*
 
 fun LargeTestBaseV1.createRandomUser(
     nickname: String? = null,
-    profileImageUrl: String? = null
+    profileImageUrl: String? = null,
 ): UserResponse =
     jsonRequest()
         .body(
             CreateUserRequest.random(
                 nickname = nickname,
-                profileImageUrl = profileImageUrl
+                profileImageUrl = profileImageUrl,
             )
         )
         .post(ApiPathsV1.USER)
         .expect2xx(UserResponse::class)
 
 fun LargeTestBaseV1.deleteUser(
-    uuid: UUID
+    uuid: UUID,
+    password: String
 ): DeletedUserResponse =
     jsonRequest()
-        .delete(ApiPathsV1.userWithUuid(uuid))
+        .delete(ApiPathsV1.userWithUuid(uuid)+"?password=$password")
         .expect2xx(DeletedUserResponse::class)

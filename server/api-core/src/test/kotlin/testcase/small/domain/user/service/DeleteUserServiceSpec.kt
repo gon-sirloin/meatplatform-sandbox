@@ -7,6 +7,8 @@ package testcase.small.domain.user.service
 import com.sirloin.sandbox.server.core.domain.user.exception.UserNotFoundException
 import com.sirloin.sandbox.server.core.domain.user.repository.UserRepository
 import com.sirloin.sandbox.server.core.domain.user.service.DeleteUserService
+import com.sirloin.sandbox.server.core.exception.MtException
+import com.sirloin.sandbox.server.core.exception.MtExceptionCode
 import com.sirloin.sandbox.server.core.i18n.LocaleProvider
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,6 +20,7 @@ import test.com.sirloin.annotation.SmallTest
 import test.small.domain.randomUser
 import test.small.domain.user.MockUserRepository
 import java.util.*
+import com.sirloin.sandbox.server.core.exception.ClientException as ClientException
 
 @SmallTest
 class DeleteUserServiceSpec {
@@ -34,7 +37,7 @@ class DeleteUserServiceSpec {
     @Test
     fun `Throws UserNotFoundException for nonexistent user`() {
         assertThrows<UserNotFoundException> {
-            sut.deleteUserByUuid(UUID.randomUUID())
+            sut.deleteUserByUuid(UUID.randomUUID(), "password")
         }
     }
 
@@ -45,9 +48,26 @@ class DeleteUserServiceSpec {
         val savedUser = userRepo.save(randomUser())
 
         // then:
-        val deletedUser = sut.deleteUserByUuid(savedUser.uuid)
+        val deletedUser = sut.deleteUserByUuid(savedUser.uuid, savedUser.password)
 
         // expect:
         assertThat(deletedUser.isDeleted, `is`(true))
+    }
+
+    @DisplayName("비밀번호가 일치하지 않으면 삭제되지 않는다")
+    @Test
+    fun notDeleteUserByNotValidPassword() {
+        // given:
+        val savedUser = userRepo.save(randomUser())
+
+        val notValidPassword = savedUser.password + 1
+        // then: expect:
+        val exception = assertThrows<ClientException> {
+            sut.deleteUserByUuid(savedUser.uuid, notValidPassword)
+        }
+
+        assertThat(exception.code, `is`(MtExceptionCode.WRONG_PASSWORD))
+
+
     }
 }
